@@ -2,4 +2,4 @@ isoCutCell/isoCutCell.C
 isoCutFace/isoCutFace.C
 isoAdvection/isoAdvection.C
 
-LIB = $(FOAM_USER_LIBBIN)/libisoAdvection
+LIB = $(FOAM_USER_LIBBIN)/libisoAdvection4dropletSmoke

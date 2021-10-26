@@ -364,6 +364,23 @@ public:
                 );
             }
 
+            //- Return mass flux
+            tmp<surfaceScalarField> getRhoPhi
+            (
+                const surfaceScalarField& rho1,
+                const surfaceScalarField& rho2
+            ) const
+            {
+                return tmp<surfaceScalarField>
+                (
+                    new surfaceScalarField
+                    (
+                        "rhoPhi",
+                        (rho1 - rho2)*dVf_/mesh_.time().deltaT() + rho2*phi_
+                    )
+                );
+            }
+
             scalar advectionTime() const
             {
                 return advectionTime_;

@@ -10,7 +10,7 @@ cd ${0%/*} || exit 1   # run from this directory
 # 5. Add #include "isoAdvection.H" to top of interFoam.C
 # 6. Add -I$\(ISOADVECTION\)\/lnInclude under EXE_INC in Make/options
 # 7. Add -L$\(FOAM_USER_LIBBIN) / under EXE_LIB in Make/options
-# 8. Add -lisoAdvection under EXE_LIB in Make/options
+# 8. Add -lisoAdvection4dropletSmoke under EXE_LIB in Make/options
 # 9. Change $(FOAM_APPBIN)/interFoam to $(FOAM_USER_APPBIN)/interFlow in Make/files
 #
 # This is essentially what this script is doing (with a copy of interFoam to not
@@ -81,9 +81,9 @@ if [[ -z $(grep "ISOADVECTION" ${targetDir}/Make/options) ]]; then
     echo "Adding ISOADVECTION to Make/options"
     sed -i '0,/EXE_INC.*$/s//&\n    -I$\(ISOADVECTION\)\/lnInclude \\/' ${targetDir}/Make/options
 fi
-if [[ -z $(grep "lisoAdvection" ${targetDir}/Make/options) ]]; then
-    echo "Adding -lisoAdvection to Make/options"
-    sed -i '0,/EXE_LIB.*$/s//&\n    -lisoAdvection \\/' ${targetDir}/Make/options
+if [[ -z $(grep "lisoAdvection4dropletSmoke" ${targetDir}/Make/options) ]]; then
+    echo "Adding -lisoAdvection4dropletSmoke to Make/options"
+    sed -i '0,/EXE_LIB.*$/s//&\n    -lisoAdvection4dropletSmoke \\/' ${targetDir}/Make/options
 fi
 if [[ -z $(grep "FOAM_USER_LIBBIN" ${targetDir}/Make/options) ]]; then
     echo "Adding FOAM_USER_LIBBIN to Make/options"
