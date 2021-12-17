@@ -75,6 +75,9 @@ Foam::isoCutCell::isoCutCell(const fvMesh& mesh, scalarField& f)
     isoFaceCentreAndAreaCalculated_(false)
 {
     clearStorage();
+    faceStatus_.clear();
+    //faceStatus_.resize(mesh_.Cf().size());
+    faceStatus_.resize(mesh_.faces().size());
 }
 
 
@@ -355,6 +358,8 @@ Foam::label Foam::isoCutCell::calcSubCell
         const label facei = c[fi];
 
         const label faceStatus = isoCutFace_.calcSubFace(facei, isoValue_);
+
+        faceStatus_[facei] = faceStatus;
 
         if (faceStatus == 0)
         {

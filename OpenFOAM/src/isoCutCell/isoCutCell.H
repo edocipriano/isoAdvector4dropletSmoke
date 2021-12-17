@@ -130,6 +130,9 @@ class isoCutCell
         //- Boolean telling if isoface centre and area have been calculated
         bool isoFaceCentreAndAreaCalculated_;
 
+        //- [ALPHAF]
+        DynamicList<label> faceStatus_;
+
 
     // Private Member Functions
 
@@ -181,6 +184,10 @@ public:
         );
 
         void volumeOfFluid(volScalarField& alpha1, const scalar f0);
+
+        inline DynamicList<label> fullySubFaces() const { return fullySubFaces_; }
+        inline DynamicList<label> faceStatus() const { return faceStatus_; }
+        inline DynamicList<vector> isoCutFaceAreas() const { return isoCutFaceAreas_; }
 };
 
 

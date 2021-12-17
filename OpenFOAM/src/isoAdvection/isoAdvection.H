@@ -161,6 +161,9 @@ class isoAdvection
             //- Storage for boundary surface iso value
             DynamicScalarList bsf0_;
 
+            //- [ALPHAF]
+            DynamicList<scalar> alphaf_;
+
         // Additional data for parallel runs
 
             //- List of processor patch labels
@@ -453,6 +456,9 @@ public:
             {
                 timeIntegratedFlux();
             }
+
+            //- [ALPHAF]
+            inline DynamicList<scalar> alphaf() const { return alphaf_; }
 };
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

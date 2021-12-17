@@ -156,6 +156,10 @@ Foam::isoAdvection::isoAdvection
             }
         }
     }
+
+    // [ALPHAF]
+    alphaf_.clear();
+    alphaf_.resize(mesh_.faces().size());
 }
 
 
@@ -204,6 +208,12 @@ void Foam::isoAdvection::timeIntegratedFlux()
     // Storage for isoFace points. Only used if writeIsoFacesToFile_
     DynamicList<List<point> > isoFacePts;
 
+    // [ALPHAF]
+    forAll(alphaf_, facei)
+    {
+        alphaf_[facei] = 0.;
+    }
+
     // Loop through all cells
     forAll(alpha1In_, celli)
     {
@@ -244,6 +254,32 @@ void Foam::isoAdvection::timeIntegratedFlux()
 
         // If cell is not cut move on to next cell
         if (cellStatus != 0) continue;
+
+        // [ALPHAF] If cell is cut fill faces with values from isoCutFace
+        DynamicList<vector> isoCutFaceAreas = isoCutCell_.isoCutFaceAreas();
+        DynamicList<label> fullySubFaces = isoCutCell_.fullySubFaces();
+
+        const cell& c = mesh_.cells()[celli];
+        int counter = 0;
+
+        forAll(c, fi)
+        {
+            label facei = c[fi];
+
+            if (isoCutCell_.faceStatus()[facei] == 0)
+            {
+                alphaf_[facei] = mag(isoCutFaceAreas[counter])/mag(mesh_.faceAreas()[facei]);
+                counter++;
+            }
+            else if (isoCutCell_.faceStatus()[facei] == -1)
+            {
+                alphaf_[facei] = 1.;
+            }
+            else
+            {
+                alphaf_[facei] = 0.;
+            }
+        }
 
         // If cell is cut calculate isoface unit normal
         const scalar f0(isoCutCell_.isoValue());
