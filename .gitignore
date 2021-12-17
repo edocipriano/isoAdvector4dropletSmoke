@@ -1,3 +1,6 @@
+# Compiled versions
+OpenFOAM-*
+
 # PyFoam and python stuff
 PyFoam*
 PlyParser_FoamFileParser_parsetab.py*

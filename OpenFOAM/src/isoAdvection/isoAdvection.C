@@ -1068,5 +1068,21 @@ void Foam::isoAdvection::writeIsoFaces
     }
 }
 
+bool Foam::isoAdvection::cellIsCut(const label celli)
+{
+    // Calculate cell status (-1: cell is fully below the isosurface, 0:
+    // cell is cut, 1: cell is fully above the isosurface)
+    label maxIter = 100;
+    label cellStatus = isoCutCell_.vofCutCell
+    (
+        celli,
+        alpha1In_[celli],
+        isoFaceTol_,
+        maxIter
+    );
+
+    return cellStatus == 0 ? true : false;
+}
+
 
 // ************************************************************************* //

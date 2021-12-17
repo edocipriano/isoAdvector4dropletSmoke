@@ -364,6 +364,23 @@ public:
                 );
             }
 
+            //- Return mass flux
+            tmp<surfaceScalarField> getRhoPhi
+            (
+                const surfaceScalarField& rho1,
+                const surfaceScalarField& rho2
+            ) const
+            {
+                return tmp<surfaceScalarField>
+                (
+                    new surfaceScalarField
+                    (
+                        "rhoPhi",
+                        (rho1 - rho2)*dVf_/mesh_.time().deltaT() + rho2*phi_
+                    )
+                );
+            }
+
             scalar advectionTime() const
             {
                 return advectionTime_;
@@ -374,6 +391,68 @@ public:
             (
                 const DynamicList<List<point> >& isoFacePts
             ) const;
+
+            //- Return isoCutCell object
+            inline isoCutCell* icc()
+            {
+                return &isoCutCell_;
+            }
+
+            //- Return surface cells
+            inline DynamicLabelList surfCells()
+            {
+                return surfCells_;
+            }
+
+            //- Return interface normal in celli
+            vector getNormal(const label celli)
+            {
+                if (cellIsCut(celli))
+                {
+                    vector n0(isoCutCell_.isoFaceArea());
+                    n0 /= (mag(n0));
+                    return n0;
+                }
+                else
+                {
+                    return vector::zero;
+                }
+            }
+
+            //- Return interface oriented surface in celli
+            vector getSurfaceArea(const label celli)
+            {
+                if (cellIsCut(celli))
+                {
+                    return isoCutCell_.isoFaceArea();
+                }
+                else
+                {
+                    return vector::zero;
+                }
+            }
+
+            //- Return centre of the isoFace
+            point getIsoFaceCentre(const label celli)
+            {
+                if (cellIsCut(celli))
+                {
+                    return isoCutCell_.isoFaceCentre();
+                }
+                else
+                {
+                    return point::zero;
+                }
+            }
+
+            //- Return true if cell is cut by the interface
+            bool cellIsCut(const label celli);
+
+            //- Reconstruction step
+            void reconstruct()
+            {
+                timeIntegratedFlux();
+            }
 };
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
